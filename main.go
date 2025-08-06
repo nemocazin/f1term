@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"f1term/internal/selectYear"
 )
 
 func main() {
-	url := "https://api.openf1.org/v1/meetings?year=2024"
+	selectYear.printYears()
+	url := "https://api.openf1.org/v1/meetings?year=2022"
 
 	// Création de la requête
 	resp, err := http.Get(url)
