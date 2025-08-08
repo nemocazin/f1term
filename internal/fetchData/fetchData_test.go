@@ -127,7 +127,7 @@ func TestFetchByYears_ChannelSignaling(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`[]`))
+		_, _ = w.Write([]byte(`[]`))
 	}))
 	defer server.Close()
 
@@ -156,9 +156,9 @@ func TestFetchByYears_MixedData(t *testing.T) {
 
 		// Alternante between empty and complete response
 		if requestCount%2 == 0 {
-			w.Write([]byte(`[]`)) // With empty response
+			_, _ = w.Write([]byte(`[]`)) // With empty response
 		} else {
-			w.Write([]byte(`[{"id": 1, "name": "Test"}]`)) // With data response
+			_, _ = w.Write([]byte(`[{"id": 1, "name": "Test"}]`)) // With data response
 		}
 	}))
 	defer server.Close()
@@ -192,7 +192,7 @@ func BenchmarkFetchByYears(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		done := make(chan struct{})
 		go func() {
-			FetchByYears(done)
+			_ = FetchByYears(done)
 		}()
 		<-done
 	}
