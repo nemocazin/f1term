@@ -8,6 +8,6 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/go-job.yml
+    uses: ./.github/workflows/preliminaries.yml
     with:
         task: go build ./...

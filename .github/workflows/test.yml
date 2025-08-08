@@ -8,12 +8,12 @@ on:
 
 jobs:
   tests:
-    uses: ./.github/workflows/go-job.yml
+    uses: ./.github/workflows/preliminaries.yml
     with:
       task: go test -v ./...
 
   lint:
-    uses: ./.github/workflows/go-job.yml
+    uses: ./.github/workflows/preliminaries.yml
     with:
       task: |
         curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
@@ -22,7 +22,7 @@ jobs:
         golangci-lint run ./...
 
   coverage:
-    uses: ./.github/workflows/go-job.yml
+    uses: ./.github/workflows/preliminaries.yml
     with:
       task: |
         go test -coverprofile=coverage.out ./...
