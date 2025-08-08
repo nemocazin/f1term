@@ -9,7 +9,11 @@ import (
 func main() {
 	done := make(chan struct{})
 
-	go fetchData.FetchByYears(done)
+	go func() {
+		if err := fetchData.FetchByYears(done); err != nil {
+			return
+		}
+	}()
 
 	for {
 		select {

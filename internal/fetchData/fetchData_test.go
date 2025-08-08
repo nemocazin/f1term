@@ -21,7 +21,7 @@ func TestFetchByYears_ValidData(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`[{"id": 1, "name": "Test Meeting"}]`))
+		_, _ = w.Write([]byte(`[{"id": 1, "name": "Test Meeting"}]`))
 	}))
 	defer server.Close()
 
@@ -75,7 +75,7 @@ func TestFetchByYears_ConsecutiveEmptyResponses(t *testing.T) {
 		requestCount++
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`[]`)) // Empty response
+		_, _ = w.Write([]byte(`[]`)) // Empty response
 	}))
 	defer server.Close()
 
@@ -101,7 +101,7 @@ func TestFetchByYears_InvalidJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{invalid json`)) // Malformed JSON
+		_, _ = w.Write([]byte(`{invalid json`)) // Malformed JSON
 	}))
 	defer server.Close()
 
@@ -134,7 +134,7 @@ func TestFetchByYears_ChannelSignaling(t *testing.T) {
 	done := make(chan struct{})
 
 	go func() {
-		FetchByYears(done)
+		_ = FetchByYears(done)
 	}()
 
 	// Verify the signal is corrtcly sent to the channel
