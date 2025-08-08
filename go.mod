@@ -1,6 +1,6 @@
 module f1term
 
-go 1.23.0
+go 1.24.5
 
 require (
 	atomicgo.dev/cursor v0.2.0 // indirect
