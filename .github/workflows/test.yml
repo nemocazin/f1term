@@ -7,32 +7,23 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  tests:
+    uses: ./.github/workflows/go-job.yml
+    with:
+      task: go test -v ./...
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  lint:
+    uses: ./.github/workflows/go-job.yml
+    with:
+      task: |
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
+          | sh -s -- -b $(go env GOPATH)/bin v1.61.0
+        echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+        golangci-lint run ./...
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.23.0'
-
-      - name: Run Unit Tests
-        run: go test -v ./...
-
-      - name: Install golangci-lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-            | sh -s -- -b $(go env GOPATH)/bin v1.61.0
-          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-
-
-      - name: Run Linter
-        run: golangci-lint run ./...
-
-      - name: Run Tests with Coverage
-        run: |
-          go test -coverprofile=coverage.out ./...
-          go tool cover -func=coverage.out
+  coverage:
+    uses: ./.github/workflows/go-job.yml
+    with:
+      task: |
+        go test -coverprofile=coverage.out ./...
+        go tool cover -func=coverage.out
